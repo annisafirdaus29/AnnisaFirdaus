@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+</head>
+<body>
+
+<!-- main container -->
+<div class="container mt-3" th:fragment="customers">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Customer</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a href="/add">Add customer</a>
+                    </li>
+                </ul>
+
+                <form class="form-inline my-2 my-lg-0" action="/list" method="get">
+                    <input class="form-control ml-25 mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" value="" th:value="${search}" id="search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" action="/filter" method="get">
+                    <select class="form-control mr-sm-2 ml-sm-4" name="filter" value="" th:value="${filterNeeded}" id="filter">
+                        <option value="">All Gender</option>
+                        <option value="true">Laki-laki</option>
+                        <option value="false">Perempuan</option>
+                    </select>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
+                </form>
+            </div>
+        </nav>
+    <p></p><b><h3 align="center">Customer Data</h3></b>
+
+    <!-- Table of parts -->
+    <div class="row" th:list="${customers}">
+            <table class="table table-bordered table-hover horizontal-align table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="width: 25%; text-align: center">First Name</th>
+                    <th scope="col" style="width: 25%; text-align: center">Last Name</th>
+                    <th scope="col" style="width: 10%; text-align: center">Age</th>
+                    <th scope="col" style="width: 10%; text-align: center">Email</th>
+                    <th scope="col" style="width: 10%; text-align: center">Mobil Number</th>
+                    <th scope="col" style="width: 10%; text-align: center">Date Started</th>
+                    <th scope="col" style="width: 10%; text-align: center">Status</th>
+                    <th scope="col" style="width: 10%; text-align: center">Gender</th>
+                    <th scope="col" style="width: 10%; text-align: center">Edit</th>
+                    <th scope="col" style="width: 10%; text-align: center">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="customer : ${customers}">
+                    <td th:text="${customer.firstName}"></td>
+                    <td th:text="${customer.lastName}" style="text-align: center"></td>
+                    <td th:text="${customer.age}" style="text-align: center"></td>
+                    <td th:text="${customer.email}" style="text-align: center"></td>
+                    <td th:text="${customer.mobileNumber}" style="text-align: center"></td>
+                    <td th:text="${customer.dateStarted}" style="text-align: center"></td>
+                    <td th:text="${customer.status}" style="text-align: center"></td>
+                    <td th:text="${customer.gender? 'Laki-laki' : 'Perempuan'}" style="text-align: center"></td>
+                    <td style="text-align: center"><a th:href="@{/edit-customer/{id}(id=${customer.id})}"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+                    <td style="text-align: center"><a th:href="@{/delete-customer/{id}(id=${customer.id})}"><i class="fa fa-trash" style="font-size:20px"></i></a></td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
+
+    <!-- amount of computers -->
+    <!-- div class="row">
+        <table class="table table-bordered table-dark">
+            <tbody>
+            <td style="width: 55%">Possible to assemble:</td>
+            <td style="width: 15%"; th:text="${computers}" align="center"></td>
+            <td style="width: 30%">computer(s).</td>
+            </tbody>
+        </table>
+    <--/div>
+
+    <!-- pagination -->
+    <div class="row justify-content-center">
+            <ul class="pagination" th:if="${customers.getTotalElements()} gt 0">
+                <li class="page-item disabled">
+                    <span class="page-link" th:if="!${customers.hasPrevious()}">
+                    Previous
+                    </span>
+                </li>
+                <li>
+                    <span th:if="${customers.hasPrevious()}">
+                    <a class="page-link" th:href="@{/list/(page=${customers.number - 1},size=${customers.size})}">Previous</a>
+                    </span>
+                </li>
+                <li class="page-item" th:each="i: ${#numbers.sequence(0, customers.totalPages - 1)}">
+                    <span th:if="${customers.number == i}" class="page-link">[[${i}+1]]</span>
+                    <span th:unless="${customers.number == i}">
+                        <a class="page-link" th:href="@{/list/(page=${i},size=${customers.size})}">[[${i}+1]]</a>
+                    </span>
+                </li>
+                <li>
+                    <span th:if="${customers.hasNext()}">
+                        <a class="page-link" th:href="@{/list(page=${customers.number+1},size=${customers.size})}">Next</a>
+                    </span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" th:if="!${customers.hasNext()}">
+                    Next
+                    </span>
+                </li>
+            </ul>
+</div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
