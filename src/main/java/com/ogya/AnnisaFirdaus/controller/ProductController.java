@@ -45,6 +45,7 @@ public class ProductController {
 
         return "product/list-product";
     }
+#test2
 
 
     @GetMapping("/add-product")
