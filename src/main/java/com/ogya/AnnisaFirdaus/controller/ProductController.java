@@ -45,11 +45,7 @@ public class ProductController {
 
         return "product/list-product";
     }
-<<<<<<< HEAD
-#test3
-=======
-#test2
->>>>>>> test
+#test
 
 
     @GetMapping("/add-product")
